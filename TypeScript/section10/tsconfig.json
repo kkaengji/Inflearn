@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    /* 모듈 및 대상 */
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleDetection": "force",
+    /* 엄격성 및 타입 검사 */
+    "strict": true,
+    "allowJs": true,
+    //"noImplicitAny": false,
+    /* 출력 (컴파일된 JS 파일) */
+    "outDir": "dist",
+    /* 기타 권장 사항 */
+    "skipLibCheck": true
+  },
+  "ts-node": {
+    "esm": true
+  },
+  "include": ["src"] // 컴파일할 TypeScript 파일의 위치를 지정
+}
