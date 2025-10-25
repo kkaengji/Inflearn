@@ -1,6 +1,6 @@
 # React + JavaScript
 
-## 1. 프로젝트 생성
+## 7. 프로젝트 생성
 
 ```bash
 npm create vite@latest
@@ -15,8 +15,11 @@ npm run preview
 > : App.css / index.css <br />
 > : vite.svg / react.svg <br />
 
-## 2. 컴포넌트
+---
 
+## 10. 컴포넌트
+
+: 화면(UI)을 구성하는 재사용 가능한 코드 조각, 하나의 UI 단위를 만드는 함수
 : 이름이 대문자로 시작해야 컴포넌트로 인식된다.
 
 ```bash
@@ -28,12 +31,16 @@ class ClassComp extends Component {
     return <p>Class Comp</p>;
   }
 }
+```
 
+```bash
 # 일반 함수형 컴포넌트
 function FunctionComp() {
   return <p>Function Comp</p>;
 }
+```
 
+```bash
 # 화살표 함수형 컴포넌트
 const ArrowFunctionComp = () => {
   return <p>Arrow Function Comp</p>;
@@ -42,13 +49,15 @@ const ArrowFunctionComp = () => {
 export { ClassComp, FunctionComp, ArrowFunctionComp };
 ```
 
-## 3. JSX 문법 기초
+---
+
+## 11. JSX 문법 기초
 
 ### 중괄호 표현식 {}
 
 : JavaScript 코드를 작성하고 그 결과를 렌더링하는 데 사용
 
-#### ✅ 가능한 것
+#### 가능한 것 ✅
 
 : 중괄호 안에는 값을 생성하는 모든 JavaScript 표현식이 들어갈 수 있다.
 
@@ -59,7 +68,7 @@ export { ClassComp, FunctionComp, ArrowFunctionComp };
 - 배열 map함수: items.map(item => <li key={item.id}>{item.name}</li>)
 - 객체 속성 접근: user.profile.age
 
-#### ❌ 불가능한 것
+#### 불가능한 것 ❌
 
 : 값을 생성하지 않는 JavaScript 구문은 직접 포함될 수 없다
 
@@ -72,7 +81,9 @@ export { ClassComp, FunctionComp, ArrowFunctionComp };
 
 : Boolean값이나 null, undefined는 렌더링되지 않는다.
 
-## 4-1. 조건부 렌더링
+---
+
+## 12-1. 조건부 렌더링
 
 ### 삼항 연산자 A ? B : C
 
@@ -112,7 +123,7 @@ function App() {
 }
 ```
 
-### null 병합연산자, OR 연산자 ||
+### null 병합연산자 ??, OR 연산자 ||
 
 : 앞에 null 또는 undefined가 들어 올경우 뒤에 오는 값 반환
 : 특정 값이 비어있거나 null일 때 기본값을 제공하는 용도로 자주 사용
@@ -137,7 +148,7 @@ function App() {
 }
 ```
 
-## 4-2. 리스트 렌더링
+## 12-2. 리스트 렌더링
 
 : 배열 데이터를 반복해서 여러 개의 컴포넌트나 엘리먼트를 화면에 그리는 것
 : 반복될 요소에 key라는 속성을 설정해주어야 함 (고유한 값o, 인덱스는 비권장)
@@ -177,7 +188,9 @@ function App() {
 > array.filter(callbackFn, thisArg);
 > : 배열에서 특정 조건을 만족하는 요소만 추려내서 새로운 배열을 반환 (불변성)
 
-## 5. JSX 속성과 스타일링
+---
+
+## 13. JSX 속성과 스타일링
 
 ### 객체 스프레딩을 이용한 스타일링
 
