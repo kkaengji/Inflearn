@@ -1,38 +1,20 @@
 import "./App.css";
-import React, { useReducer } from "react";
-import { userReducer, initialState } from "./reducers/userReducer";
+import { CountProvider } from "./contexts/CountContext";
+import { ToggleProvider } from "./contexts/ToggleContext";
+import Child1 from "./Child1";
+import Child3 from "./Child3";
 
 function App() {
-  const [state, dispatch] = useReducer(userReducer, initialState);
-
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Enter name"
-        value={state.name}
-        onChange={(e) =>
-          dispatch({
-            type: "SET_NAME",
-            payload: e.target.value,
-          })
-        }
-      />
-      <input
-        type="number"
-        placeholder="Enter birth year"
-        value={state.year}
-        onChange={(e) =>
-          dispatch({
-            type: "SET_YEAR",
-            payload: e.target.value,
-          })
-        }
-      />
-      {state.warning && <p style={{ color: "red" }}>{state.warning}</p>}
-      <p>Name: {state.name}</p>
-      <p>Year: {state.year}</p>
-    </div>
+    <>
+      <h2>App</h2>
+      <CountProvider>
+        <Child1 />
+      </CountProvider>
+      <ToggleProvider>
+        <Child3 />
+      </ToggleProvider>
+    </>
   );
 }
 

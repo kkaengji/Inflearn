@@ -1,12 +1,13 @@
 # State
 
-> const [state, setState] = useState(initialState);
-> : 컴포넌트 내부에서 변경되는 데이터를 저장할 때 사용 (가장 기본적인 상태 관리 Hook)
-> : 값이 바뀌면 화면(UI)이 자동으로 다시 렌더링
-> : state는 직접 바꾸면 안됨 setter 함수로 바꿔야함
-> : 문자열, 숫자, 객체, 배열, 불리언 등.. 다양한 값 가능
-> : 부모 컴포넌트의 state가 props로 자식 컴포넌트에 전달되어 사용될 수 있다.
-> : 컴포넌트는 state가 변경될때, props가 변경될 때, 부모가 리렌더링될 때 리렌더링 된다.
+: 컴포넌트 내부에서 변경되는 데이터를 저장할 때 사용 (가장 기본적인 상태 관리 Hook)
+
+> const [state, setState] = useState(initialState); <br />
+> : 값이 바뀌면 화면(UI)이 자동으로 다시 렌더링 <br />
+> : state는 직접 바꾸면 안됨 setter 함수로 바꿔야함 <br />
+> : 문자열, 숫자, 객체, 배열, 불리언 등.. 다양한 값 가능 <br />
+> : 부모 컴포넌트의 state가 props로 자식 컴포넌트에 전달되어 사용될 수 있다. <br />
+> : 컴포넌트는 state가 변경될때, props가 변경될 때, 부모가 리렌더링될 때 리렌더링 된다. <br />
 
 ```bash
 import { useState } from "react";
