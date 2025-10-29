@@ -1,9 +1,0 @@
-{
-  "watch": ["src", "config"],
-  "ext": "js, ts, css",
-  "ignore": ["*.log", "/temp/*"],
-  "exec": "node index.js",
-  "env": {
-    "NODE_ENV": "development"
-  }
-}
