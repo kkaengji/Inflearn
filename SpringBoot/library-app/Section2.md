@@ -195,18 +195,57 @@ public class UserController {
 - throw new IllegalArgumentException();
  : 메서드에 전달된 인수가 유효하지 않거나 부적절할 때 예외를 던짐
 
-# 4. Clean Code
-- 함수는 최대한 작게 만들고 한 가지 일만 수행하는 것이 좋다.
-- 클래스는 작아야 하며 하나의 책임만을 가져야 한다.
+---
 
-## 계층형 아키텍처 Layered Architecture
-Repository -> Service -> Controoller
+# 4. Clean Code
+- 가독성: 의도를 분명히 밝히는 이름, 간결하고 작은 함수
+- 단순성: DRY, KISS
+- 설계: SOLID 원칙 준수, 높은 응집도, 낮은 결합도
+- 습관: 보이 스카우트 규칙
 
 ---
 
-# 정리
- - 서버가 시작될 때 스프링 컨테이너가 시작되고 가장 기본적인 스프링 빈들이 등록됨
- - JDBC 템플릿을 의존하는 UserRepository가 스프링 빈으로 등록되면서 인스턴스화 됨
- - 그러면 UserService는 UserRepository를 필요로 함
- - 그렇기 때문에 UserRepository를 의존하는 UserService가 스프링 빈으로 등록
- - 그러면 다시 UserService를 의존하는 UserController가 스프링 빈으로 등록됨
+# 5. 스프링 빈 등록 및 의존성 주입 과정
+: 컨테이너는 의존 관계(Controller -> Service -> Repository)의 역순으로, 즉 필요한 객체가 먼저 준비(등록)되는 순서에 따라 빈을 인스턴스화하고 의존성을 주입
+ - 컨테이너 시작: 서버 시작과 함께 스프링 컨테이너가 구동되며 가장 기본적인 빈들이 등록
+ - 하위 계층 빈 등록: JdbcTemplate을 의존하는 **UserRepository**가 먼저 등록
+ - 중간 계층 빈 등록: UserRepository를 의존하는 **UserService**가 등록
+ - 상위 계층 빈 등록: UserService를 의존하는 **UserController**가 최종적으로 등록
+
+## 컨트롤러-서비스-리포지토리 3계층 역할
+- 컨트롤러 계층 (Controller Layer)
+: 클라이언트(웹 브라우저, 모바일 앱 등)의 요청을 받아들이고 응답하는 역할
+- 서비스 계층 (Service Layer)
+: 
+- 리포지토리 계층 (Repository Layer)
+: 
+
+---
+
+# 6. 스프링 컨테이너 (ApplicationContext)
+: 스프링 빈들을 생성하고 관리하며, 이 빈들이 서로 필요한 다른 빈들을 주입받도록 연결
+ *빈? 스프링 컨테이너가 관리하는 자바 객체
+
+- @Configuration
+: 클래스에 붙이는 어노테이션
+: @Bean을 사용할 때 함께 사용해 주어야 한다.
+
+- @Bean
+: 메소드에 붙이는 어노테이션
+: 반환되는 객체를 스프링 빈에 등록한다.
+
+- @Component
+: 주어진 클래스를 '컴포넌트'로 간주한다.
+: 이 클래스들은 스프링 서버가 뜰 때 자동으로 감지된다.
+
+- @Primary
+: 동일한 타입의 빈(Bean)이 여러 개 존재할 때, 그중에서 기본적으로 주입될 빈을 지정
+
+- @Qualifier
+: 동일한 타입의 빈(Bean)이 여러 개 존재할 때, 스프링에게 "정확히 어떤 빈을 주입해야 하는지" 지정해주는 역할
+: @Primary보다 높은 우선순위를 가짐
+
+## 스프링 빈을 주입 받는 몇 가지 방법
+1. (가장 권장)생성자를 이용해 주입받는 방식
+2. setter와 @Autowired 사용
+3. 필드에 직접 @Autowired 사용

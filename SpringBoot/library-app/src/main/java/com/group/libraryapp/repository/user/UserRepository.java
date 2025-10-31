@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-// SQL을 사용해 실제 DB와의 통신을 담당
 @Repository
 public class UserRepository {
 
