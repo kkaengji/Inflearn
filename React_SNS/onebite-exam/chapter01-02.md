@@ -41,9 +41,49 @@ npm i -D prettier prettier-plugin-tailwindcss
 # 3. Shadcn/ui
 
 https://ui.shadcn.com/docs/installation
+https://lucide.dev/icons/
 
 : 현대 웹 개발에 필요한 거의 대부분의 필수적인 UI 요소들을 제공하는 디자인 라이브러리
 : Tailwind CSS 기반으로 제작
 : 홈페이지에서 ctrl + k로 검색하여 사용
 
-## 3.1. Shadcn/ui 설치
+# 4. React Router 정리
+
+```bash
+$ npm i react-router@latest
+
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { BrowserRouter } from "react-router";
+
+createRoot(document.getElementById("root")!).render(
+  # URL에 맞는 컴포넌트를 렌더링하도록 기반 환경을 제공
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+);
+```
+
+```bash
+function AuthLayout() {
+  return (
+    <div>
+      <header>Auth!</header>
+      <Outlet /> # 현재 경로와 일치하는 중첩된 자식 라우트가 렌더링될 위치를 지정
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<IndexPage />} />
+      <Route element={<AuthLayout />}>
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
+      </Route>
+    </Routes>
+  );
+}
+```
