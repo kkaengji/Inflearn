@@ -282,7 +282,7 @@ export const dynamic = "auto";
 ### loading.tsx
 
 : 페이지나 레이아웃이 서버에서 로드되는 동안 자동으로 표시되는 로딩 UI를 정의하는 파일 <br />
-: 해당 경로 아래에 있는 비동기(async) 페이지 컴포넌트나 서버 컴포넌트가 렌더링될 때, Next.js가 자동으로 스트리밍 렌더링(Streaming Rendering) 을 수행하며, 이때 loading.tsx가 로딩 중 UI로 표시됨
+: 해당 경로 아래에 있는 비동기(async) 페이지 컴포넌트나 서버 컴포넌트가 렌더링될 때, Next.js가 자동으로 스트리밍 렌더링(Streaming Rendering) 을 수행하며, 이때 loading.tsx가 로딩 중 UI로 표시됨 <br />
 : 브라우저에서 쿼리 스트링이 변경될 때에는 트리거링 되지 않는다.
 
 ## 8.1 컴포넌트 스트리밍
@@ -291,7 +291,7 @@ export const dynamic = "auto";
 
 ### Suspense
 
-: 비동기 렌더링 중인 컴포넌트를 잠시 "보류(suspend)"시키고, 그동안 대신 보여줄 fallback(대체 UI) 을 지정하는 React 기능
+: 비동기 렌더링 중인 컴포넌트를 잠시 "보류(suspend)"시키고, 그동안 대신 보여줄 fallback(대체 UI) 을 지정하는 React 기능 <br />
 : key를 설정해주면 쿼리 스트링만 바뀌어도 트리거링 된다.
 
 ```bash
@@ -304,7 +304,7 @@ export const dynamic = "auto";
 
 ## 8.2. 스켈레톤(Skeleton) UI
 
-: 데이터가 아직 로드되지 않았을 때, 화면의 최종 형태를 회색 블록이나 윤곽선으로 미리 표시해두는 로딩 UI
+: 데이터가 아직 로드되지 않았을 때, 화면의 최종 형태를 회색 블록이나 윤곽선으로 미리 표시해두는 로딩 UI <br />
 : 사용자가 체감하는 대기 시간을 줄여주어 사용자 경험(UX)을 크게 개선
 
 - React Loading Skeleton 라이브러리 추천
@@ -367,4 +367,165 @@ export default function Error({
 
 # 9. 서버 액션 (Server Actions)
 
-: 브라우저에서 호출할 수 있는 서버에서 실행되는 비동기 함수
+: 별도의 API 엔드포인트(API Routes) 없이 클라이언트 컴포넌트나 서버 컴포넌트에서 직접 서버 코드를 호출하고 실행할 수 있게 해주는 비동기 함수
+
+```bash
+function ReviewEditor() {
+  async function createReviewAction(formData: FormData) {
+    "use server";
+
+    const content = formData.get("content")?.toString();
+    const author = formData.get("author")?.toString();
+
+    console.log("리뷰 작성!", { content, author });
+  }
+
+  return (
+    <section>
+      <form action={createReviewAction}>
+        <input name="content" placeholder="리뷰 내용" />
+        <input name="author" placeholder="작성자" />
+        <button type="submit">작성하기</button>
+      </form>
+    </section>
+  );
+}
+```
+
+## 캐시 무효화(Invalidate)
+
+- revalidatePath()
+  : 서버 액션이나 라우트 핸들러 안에서 호출해서 특정 경로와 관련된 정적 데이터(SSG 캐시)를 다시 가져오도록(재검증)하는 함수
+
+```bash
+# 1. 특정 주소의 해당하는 페이지만 재검증
+revalidatePath(`/books/${bookId}`);
+
+# 2. 특정 경로의 모든 동적 페이지를 재검증
+revalidatePath("/books/[Id]", "page");
+
+# 3. 특정 레이아웃을 갖는 모든 페이지 재검증
+revalidatePath("/(with-searchbar)", "layout");
+
+# 4. 모든 데이터 재검증
+revalidatePath("/", "layout");
+
+# 5. fetch()함수의 태그 기준, 데이터 캐시 재검증
+const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/book/${bookId}`,
+    { next: { tags: [`review-${bookId}`] } }
+  );
+
+# revalidateTag(`review-${bookId}`);
+# 태그가 붙은 캐시 항목을 무효화 표시(stale) → 다음 요청 시 갱신됨. 기본적으로 “기존 캐시 + 백그라운드 갱신” 방식 가능.
+
+updateTag(`review-${bookId}`);
+# 태그가 붙은 캐시 항목을 즉시 만료(expire) → 다음 요청부터는 반드시 새 데이터 사용.
+```
+
+## 클라이언트 컴포넌트에서의 서버 액션
+
+- useActionState()
+  : 서버 액션(Server Actions)의 결과를 기반으로 컴포넌트의 상태를 관리 <br />
+  : 폼(Form) 제출 후 서버 액션이 반환하는 최신 데이터나 오류 메시지를 받아서 UI에 쉽게 표시하거나 후속 작업을 처리할 때 유용
+
+---
+
+# 10. 병렬 라우트 (Parallel Route)
+
+: 한 페이지 안에서 여러 개의 “서브 경로(슬롯)”를 동시에 렌더링하는 기능
+
+- 슬롯 (@folder)
+  : 병렬로 렌더링이 될 하나의 페이지 컴포넌트를 보관하는 역할
+  : 슬롯 이름을 props으로 받아서 원하는 위치에 렌더링
+  : URL 경로에는 아무런 영향을 미치지 않음
+  : 슬롯의 개수에는 제한이 존재하지 않음
+
+```bash
+export default function Layout({
+  children,
+  sidebar,
+}: {
+
+  children: ReactNode;
+  sidebar: ReactNode;
+}) {
+  return (
+    <div>
+      {sidebar}
+      {children}
+    </div>
+  );
+}
+
+```
+
+---
+
+# 11. 인터셉팅 라우트 (Intercepting Route)
+
+: 현재 페이지 레이아웃을 유지한 채, 새로운 경로의 UI를 오버레이(모달 등) 형태로 표시하는 기능
+ex) 인스타그램
+
+## 폴더 명명 규칙
+
+- (.)book/[id]
+  : (상대경로) 동일한 경로 상에 있는 페이지를 인터셉팅
+- (..)
+  : 한 단계 상위 폴더의 라우트를 가로챔
+- (..)(..)
+  : 두 단계 상위 폴더의 라우트를 가로챔
+- (...)
+  : 루트(app) 경로 기준
+
+---
+
+# 12. 최적화
+
+## 12.1. 다양한 이미지 최적화 기법들
+
+- webp, AVIF 등의 차세대 형식으로 변환하기
+- 디바이스 사이즈에 맞는 이미지 불러오기
+- 레이지 로딩 적용하기
+- 블러 이미지 활용하기
+
+### Image 컴포넌트
+
+: 이미지를 “자동으로 최적화”해주는 특수한 컴포넌트
+
+## 12.2. 다양한 검색 엔진 최적화(SEO)
+
+- Sitemap 설정하기
+- RSS 발행하기
+- 시멘틱 태그 설정하기
+- 메타 데이터 설정하기
+
+### 메타 데이터 설정하기
+
+```bash
+export const metadata: Metadata = {
+  title: "한입 북스",
+  description: "한입 북스에 등록된 도서를 만나보세요",
+  openGraph: {
+    title: "한입 북스",
+    description: "한입 북스에 등록된 도서를 만나보세요",
+    images: ["/thumbnail.png"],
+  },
+};
+
+```
+
+# 13. 배포 Vercel
+
+```bash
+$ npm i -g vercel
+$ vercel login
+$ vercel
+
+# 재배포
+$ vercel --prod
+```
+
+- vercel 홈페이지 설정
+  - settings -> Environment Variables -> Key 환경변수 설정
+  - settings -> Functions -> Function Region 한국으로 변경
