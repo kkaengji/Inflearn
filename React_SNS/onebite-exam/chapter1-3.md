@@ -1,33 +1,37 @@
-# 1. React 프로젝트 생성
+# 1. React 프로젝트 생성 (Vite + TypeScript)
 
 ```bash
 $ npm create vite@latest [프로젝트명]
 ```
 
-## 주요 TypeScript 옵션 파일과 StrictMode
+## TypeScript 설정 파일 역할
 
 - tsconfig.json
-  : 프로젝트 전체의 기본 설정을 담고 있는 루트(Root) 설정 파일
+  - 프로젝트 전체에 공통으로 적용되는 기본 설정
+  - 다른 tsconfig들의 베이스 역할
 - tsconfig.app.json
-  : 브라우저에서 실행되는 클라이언트 측 코드 (즉, React 컴포넌트, 로직 등 실제 웹 앱 코드)에 대한 설정을 정의
+  - 브라우저에서 실행되는 React 앱 코드용
+  - JSX, DOM, strict 옵션 등이 주로 여기에 영향
 - tsconfig.node.json
-  : Node.js 환경에서 실행되는 코드에 대한 설정을 정의
+  - Node.js 환경에서 실행되는 코드용
+  - Vite 설정 파일, 서버 스크립트 등에 사용
 - main.tsx <StrictMode>
   : 리액트 앱의 잠재적인 문제를 검사하는 태그
 
 # 2. Tailwind CSS
 
-: 스타일링을 보다 빠르고 또 간결하게 진행할 수 있도록 도와주는 도구
+: 유틸리티 퍼스트(Utility-first) CSS 프레임워크 <br />
+: 빠른 스타일링 + 일관된 디자인 유지
 
 ## 2.1. Tailwind CSS 설치 및 클래스
 
 https://tailwindcss.com/docs/installation/using-vite
 
 ```bash
-# index.css
+# 설치 (Vite 기준)
 @import "tailwindcss";
 
-# Prettier와 Tailwind CSS 플러그인을 개발 종속성으로 설치
+# Prettier + Tailwind 플러그인
 npm i -D prettier prettier-plugin-tailwindcss
 
 # .prettierrc
@@ -87,3 +91,42 @@ function App() {
   );
 }
 ```
+
+# 5. 전역 상태 관리와 Zustand
+
+## 전역 상태?
+
+: 여러 컴포넌트에서 공유되는 상태 <br />
+: ex) 사용자 인증 정보, 테마 정보, 장바구니 정보, 언어 설정
+
+### 대표적인 상태 관리 라이브러리
+
+: Redux, Zustand, MobX, Jotai, Recoil
+
+### Context API 정리
+
+: 전역 상태 관리를 위한 기능이라기 보다는 Props Drilling 이슈를 해결하기 위해 제공되는 기능
+
+- 컴포넌트 트리 깊숙한 곳까지 props 전달을 피하기 위해 사용
+- 값이 변경되면 하위 컴포넌트 전부 리렌더링
+- 대규모 상태, 잦은 업데이트에는 비효율적
+
+## Zustand
+
+- 많은 사람들이 사용
+- 용량이 매우 가벼움
+- 매우 직관적이어서 배우기 쉬움
+
+```bash
+npm i zustand
+```
+
+```bash
+import { create } from "zustand";
+
+create(() => {
+  return {};
+});
+```
+
+Tip. F12 -> Components -> 톱니바퀴 -> Highlight updates when components render 체크
