@@ -23,7 +23,7 @@ $ npm create vite@latest [프로젝트명]
 : 유틸리티 퍼스트(Utility-first) CSS 프레임워크 <br />
 : 빠른 스타일링 + 일관된 디자인 유지
 
-## 2.1. Tailwind CSS 설치 및 클래스
+## Tailwind CSS 설치 및 클래스
 
 https://tailwindcss.com/docs/installation/using-vite
 
@@ -94,7 +94,7 @@ function App() {
 
 # 5. 전역 상태 관리와 Zustand
 
-## 전역 상태?
+## 5.1 전역 상태?
 
 : 여러 컴포넌트에서 공유되는 상태 <br />
 : ex) 사용자 인증 정보, 테마 정보, 장바구니 정보, 언어 설정
@@ -111,7 +111,7 @@ function App() {
 - 값이 변경되면 하위 컴포넌트 전부 리렌더링
 - 대규모 상태, 잦은 업데이트에는 비효율적
 
-## Zustand
+## 5.2 Zustand
 
 - 많은 사람들이 사용
 - 용량이 매우 가벼움
@@ -130,3 +130,57 @@ create(() => {
 ```
 
 Tip. F12 -> Components -> 톱니바퀴 -> Highlight updates when components render 체크
+
+### Zustand 미들웨어
+
+- combine: Store의 타입을 자동 추론
+- immer: Store의 내부의 상태 업데이트를 보다 편리하게 해줌 'npm i immer'
+- subscribeWithSelector: Store 내의 특정 값 변화시, 이벤트 핸들러 호출
+- persist: Store를 로컬, 세션 스토리지 등에 보관함
+  - 액션 함수가 기본적으로 저장 되지 않는 이유는 함수는 JSON으로 직렬화 할 수 없기 때문
+  - createJSONStorage: 세션 스토리지에 보관
+- devtools: Store의 값을 개발자 도구에서 확인할 수 있음
+
+```bash
+// 되도록 미들웨어는 아래 순서대로 적용
+export const useCountStore = create(
+  devtools(
+    persist(
+      subscribeWithSelector(
+        immer(
+          combine({ count: 0 }, (set, get) => ({
+            actions: {
+              increaseOne: () => {
+                set((state) => {
+                  state.count += 1;
+                });
+              },
+              decreaseOne: () => {
+                set((state) => {
+                  state.count -= 1;
+                });
+              },
+            },
+          })),
+        ),
+      ),
+      {
+        name: "countStore",
+        partialize: (store) => ({ count: store.count }),
+        storage: createJSONStorage(() => sessionStorage),
+      },
+    ),
+    { name: "CountStore" },
+  ),
+);
+
+useCountStore.subscribe(
+  (store) => store.count,
+  (count) => {
+    // Listner: count 값이 변경될 때마다 호출됨
+    console.log(count);
+
+    const store = useCountStore.getState();
+  },
+);
+```

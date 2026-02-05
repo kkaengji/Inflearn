@@ -1,8 +1,9 @@
-import { useCountStore } from "@/store/count";
+import { useIncreaseCount, useDecreaseCount } from "@/store/count";
 import { Button } from "../ui/button";
 
 export default function Controller() {
-  const { increase, decrease } = useCountStore((store) => store.actions);
+  const increase = useIncreaseCount();
+  const decrease = useDecreaseCount();
 
   return (
     <div>
