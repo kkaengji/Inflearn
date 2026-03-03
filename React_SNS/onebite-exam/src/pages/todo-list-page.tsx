@@ -12,8 +12,8 @@ export default function TodoListPage() {
     <div className="flex flex-col gap-5 p-5">
       <h1 className="text-2xl font-bold">TodoList</h1>
       <TodoEditor />
-      {todos?.map((todo) => (
-        <TodoItem key={todo.id} id={todo.id} content={todo.content} />
+      {todos?.map((id) => (
+        <TodoItem key={id} id={id} />
       ))}
     </div>
   );

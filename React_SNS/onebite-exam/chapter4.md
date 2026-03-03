@@ -47,3 +47,12 @@ npx json-server server/db.json
 npm i @tanstack/react-query
 npm i @tanstack/react-query-devtools
 '''
+
+# 3. 낙관적 업데이트 onMutate
+
+> 데이터 수정 요청이 성공할 것이라 낙관
+> 요청을 보내자마자 데이터 업데이트
+>
+> 빠른 반응을 제공하는 SNS에 주로 사용된다
+
+# 4. 캐시 정규화
