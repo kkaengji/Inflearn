@@ -29,7 +29,7 @@ export type Database = {
           created_at?: string
           id?: number
           image_urls?: string[] | null
-          like_count?: number
+          like_count: number
         }
         Update: {
           author_id?: string
@@ -38,6 +38,30 @@ export type Database = {
           id?: number
           image_urls?: string[] | null
           like_count?: number
+        }
+        Relationships: []
+      }
+      profile: {
+        Row: {
+          avater_url: string | null
+          bio: string
+          created_at: string
+          id: string
+          nickname: string
+        }
+        Insert: {
+          avater_url?: string | null
+          bio: string
+          created_at?: string
+          id?: string
+          nickname: string
+        }
+        Update: {
+          avater_url?: string | null
+          bio?: string
+          created_at?: string
+          id?: string
+          nickname?: string
         }
         Relationships: []
       }
