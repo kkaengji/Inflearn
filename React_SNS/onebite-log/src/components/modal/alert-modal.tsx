@@ -19,7 +19,11 @@ export default function AlertModal() {
     store.actions.close();
   };
 
-  const handelActionClick = () => {};
+  const handleActionClick = () => {
+    if (store.onPositive) store.onPositive();
+    store.actions.close();
+  };
+
   return (
     <AlertDialog open={store.isOpen}>
       <AlertDialogContent>
@@ -31,7 +35,7 @@ export default function AlertModal() {
           <AlertDialogCancel onClick={handleCancelClick}>
             취소
           </AlertDialogCancel>
-          <AlertDialogAction onClick={handelActionClick}>
+          <AlertDialogAction onClick={handleActionClick}>
             확인
           </AlertDialogAction>
         </AlertDialogFooter>
