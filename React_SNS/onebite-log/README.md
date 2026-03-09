@@ -21,3 +21,13 @@ Supabase
 ### 클라우드 컴퓨팅 솔루션 (배포)
 
 Vercel
+
+---
+
+supabase
+$ npm i @supabase/supabase-js
+$ npm i supabase@">=1.8.1" --save-dev
+$ npx supabase login
+$ npx supabase init
+package.json에 "type-gen" 설정
+$ npm run type-gen
